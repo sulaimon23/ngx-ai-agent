@@ -20,11 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm install --omit=optional
 
-      - name: Lint
-        run: npm run lint
-
       - name: Build library
         run: npm run build:lib
+
+      - name: Lint
+        run: npm run lint
 
       - name: Test
         run: npm run test -- --watch=false
