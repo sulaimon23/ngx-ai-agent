@@ -1,0 +1,42 @@
+{
+  "name": "ngx-ai-agent",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve demo",
+    "build:lib": "ng build ngx-ai-agent",
+    "build:demo": "ng build demo",
+    "build": "npm run build:lib && npm run build:demo",
+    "test": "ng test ngx-ai-agent",
+    "lint": "ng lint",
+    "lint:lib": "ng lint ngx-ai-agent",
+    "lint:demo": "ng lint demo"
+  },
+  "private": true,
+  "packageManager": "npm@11.6.0",
+  "dependencies": {
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.10",
+    "@angular/cli": "^21.2.10",
+    "@angular/compiler-cli": "^21.2.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "21.3.1",
+    "eslint": "^10.0.3",
+    "jsdom": "^28.0.0",
+    "ng-packagr": "^21.2.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.56.1",
+    "vitest": "^4.0.8"
+  }
+}
