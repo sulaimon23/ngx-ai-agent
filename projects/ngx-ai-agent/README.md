@@ -1,64 +1,101 @@
-# NgxAiAgent
+# ngx-ai-agent
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.0.
+[![npm](https://img.shields.io/npm/v/ngx-ai-agent)](https://www.npmjs.com/package/ngx-ai-agent)
+[![license](https://img.shields.io/npm/l/ngx-ai-agent)](https://github.com/your-org/ngx-ai-agent/blob/main/LICENSE)
+[![Angular](https://img.shields.io/badge/angular-21%2B-red)](https://angular.dev)
+[![zoneless](https://img.shields.io/badge/zoneless-✓-green)](https://angular.dev/guide/experimental/zoneless)
 
-## Code scaffolding
+**Signals-native LLM agents with tool calling for Angular 21+.**
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The Angular ecosystem has great UI libraries but no signals-first LLM client. `ngx-ai-agent` fills that gap: one `agent()` call gives you reactive `Signal<Message[]>` and `Signal<AgentStatus>` that drive fine-grained zoneless change detection — no RxJS, no callbacks, no manual subscriptions.
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the library, run:
+## Install
 
 ```bash
-ng build ngx-ai-agent
+npm install ngx-ai-agent zod
 ```
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+## 30-second example
 
-### Publishing the Library
+```typescript
+import { Component } from '@angular/core';
+import { agent, defineTool, openRouterProvider } from 'ngx-ai-agent';
+import { z } from 'zod';
 
-Once the project is built, you can publish your library by following these steps:
+// 1. Define a type-safe tool
+const weatherTool = defineTool({
+  name: 'get_weather',
+  description: 'Get current weather for a city.',
+  inputSchema: z.object({ city: z.string() }),
+  handler: async ({ city }) => `Sunny, 22°C in ${city}`,
+});
 
-1. Navigate to the `dist` directory:
+// 2. Create an agent — returns plain signals, no DI required
+const chat = agent({
+  provider: openRouterProvider({ apiKey: 'sk-or-…', model: 'anthropic/claude-3-5-sonnet' }),
+  tools: [weatherTool],
+  systemPrompt: 'You are a helpful assistant.',
+});
 
-   ```bash
-   cd dist/ngx-ai-agent
-   ```
-
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
+// 3. Bind signals directly in your component template
+@Component({
+  standalone: true,
+  template: `
+    @for (msg of chat.messages(); track msg.id) {
+      <div [class]="msg.role">{{ msg.content }}</div>
+    }
+    <button [disabled]="chat.status() !== 'idle'" (click)="send()">Send</button>
+  `,
+})
+export class ChatComponent {
+  protected readonly chat = chat;
+  protected send() { this.chat.send('What is the weather in Tokyo?'); }
+}
 ```
 
-## Running end-to-end tests
+## API
 
-For end-to-end (e2e) testing, run:
+### `agent(options?)`
 
-```bash
-ng e2e
+| Option | Type | Description |
+|--------|------|-------------|
+| `provider` | `LLMProvider` | Streaming provider. Defaults to `openRouterProvider()`. |
+| `tools` | `ToolDefinition[] \| Signal<ToolDefinition[]>` | Tools available to the model. Hot-swappable via Signal. |
+| `systemPrompt` | `string` | System prompt injected as the first message. |
+
+**`AgentRef`** signals: `messages`, `status`, `error`  
+**`AgentRef`** methods: `send(text)`, `reset()`
+
+### `defineTool(definition)`
+
+```typescript
+const myTool = defineTool({
+  name: 'search',
+  description: 'Search the web.',
+  inputSchema: z.object({ query: z.string() }),
+  handler: async ({ query }) => `Results for: ${query}`,
+});
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Providers
 
-## Additional Resources
+```typescript
+openRouterProvider({ apiKey: 'sk-or-…', model: 'anthropic/claude-3-5-sonnet' })
+anthropicProvider({ apiKey: 'sk-ant-…', model: 'claude-opus-4-7-20250514' })
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## How it compares
+
+| Feature | ngx-ai-agent | Vercel AI SDK (`useChat`) |
+|---------|-------------|--------------------------|
+| Framework | Angular 21+ | React / Svelte / Vue / Solid |
+| Reactivity | Angular Signals | React state / hooks |
+| Zoneless support | ✅ First-class | N/A |
+| Tool calling | ✅ Zod schemas | ✅ Zod schemas |
+| Streaming | ✅ Token-by-token signals | ✅ RSC / stream |
+| DI required | ❌ Plain factory | ❌ Hook |
+| Bundle size | ~14 kB packed | ~30 kB (React runtime) |
+
+## License
+
+MIT — see [LICENSE](https://github.com/your-org/ngx-ai-agent/blob/main/LICENSE)
