@@ -66,8 +66,8 @@ const weatherTool = defineTool({
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly apiKey = signal('');
-  protected readonly model = signal('anthropic/claude-3-5-sonnet');
+  protected readonly apiKey = signal(localStorage.getItem('ngx-agent-apiKey') ?? '');
+  protected readonly model = signal(localStorage.getItem('ngx-agent-model') ?? 'anthropic/claude-3-5-sonnet');
   protected readonly inputText = signal('');
   protected readonly activeChat = signal<AgentRef | null>(null);
 
@@ -102,11 +102,15 @@ export class App {
   }
 
   protected updateApiKey(event: Event): void {
-    this.apiKey.set((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    this.apiKey.set(value);
+    localStorage.setItem('ngx-agent-apiKey', value);
   }
 
   protected updateModel(event: Event): void {
-    this.model.set((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    this.model.set(value);
+    localStorage.setItem('ngx-agent-model', value);
   }
 
   protected updateInput(event: Event): void {

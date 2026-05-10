@@ -1,2 +1,38 @@
-/* Global reset — component styles handle the rest */
-html, body { height: 100%; }
+/* Global reset and design tokens — must live here, not in component CSS,
+   because Angular's ViewEncapsulation.Emulated scopes component stylesheets. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-2: #242838;
+  --border: #2e3347;
+  --text: #e2e8f0;
+  --text-muted: #8892a4;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --user-bg: #6366f1;
+  --assistant-bg: #1e2235;
+  --tool-bg: #14291e;
+  --tool-border: #2d5a3f;
+  --error-bg: #2d1414;
+  --error-text: #f87171;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-hover); text-decoration: none; }
+a:hover { text-decoration: underline; }
