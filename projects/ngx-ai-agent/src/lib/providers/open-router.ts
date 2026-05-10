@@ -19,6 +19,12 @@ export interface OpenRouterProviderOptions {
    * @default 'https://openrouter.ai/api/v1'
    */
   baseUrl?: string;
+  /**
+   * Maximum tokens to generate per response.
+   *
+   * @default 1024
+   */
+  maxTokens?: number;
 }
 
 // Internal types matching the OpenAI streaming SSE format used by OpenRouter.
@@ -82,12 +88,14 @@ export function openRouterProvider(options?: OpenRouterProviderOptions): LLMProv
   const model = options?.model ?? 'anthropic/claude-3-5-sonnet';
   const baseUrl = options?.baseUrl ?? 'https://openrouter.ai/api/v1';
   const apiKey = options?.apiKey ?? '';
+  const maxTokens = options?.maxTokens ?? 1024;
 
   return {
     async *stream(request: StreamRequest): AsyncIterable<StreamChunk> {
       const body: Record<string, unknown> = {
         model,
         stream: true,
+        max_tokens: maxTokens,
         messages: buildMessages(request.messages, request.systemPrompt),
       };
 
