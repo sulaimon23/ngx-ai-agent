@@ -108,7 +108,7 @@ export class App {
   }
 
   protected updateModel(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
+    const value = (event.target as HTMLSelectElement).value;
     this.model.set(value);
     localStorage.setItem('ngx-agent-model', value);
   }

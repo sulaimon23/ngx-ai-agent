@@ -27,12 +27,25 @@
 
       <label class="field">
         <span>Model</span>
-        <input
-          type="text"
-          [value]="model()"
-          (input)="updateModel($event)"
-          placeholder="anthropic/claude-3-5-sonnet"
-        />
+        <select (change)="updateModel($event)">
+          <optgroup label="Anthropic">
+            <option value="anthropic/claude-opus-4" [selected]="model() === 'anthropic/claude-opus-4'">Claude Opus 4</option>
+            <option value="anthropic/claude-sonnet-4-5" [selected]="model() === 'anthropic/claude-sonnet-4-5'">Claude Sonnet 4.5</option>
+            <option value="anthropic/claude-3-5-sonnet" [selected]="model() === 'anthropic/claude-3-5-sonnet'">Claude 3.5 Sonnet</option>
+            <option value="anthropic/claude-3-5-haiku" [selected]="model() === 'anthropic/claude-3-5-haiku'">Claude 3.5 Haiku</option>
+          </optgroup>
+          <optgroup label="OpenAI">
+            <option value="openai/gpt-4o" [selected]="model() === 'openai/gpt-4o'">GPT-4o</option>
+            <option value="openai/gpt-4o-mini" [selected]="model() === 'openai/gpt-4o-mini'">GPT-4o mini</option>
+          </optgroup>
+          <optgroup label="Google">
+            <option value="google/gemini-2.0-flash-001" [selected]="model() === 'google/gemini-2.0-flash-001'">Gemini 2.0 Flash</option>
+            <option value="google/gemini-2.5-pro-preview" [selected]="model() === 'google/gemini-2.5-pro-preview'">Gemini 2.5 Pro</option>
+          </optgroup>
+          <optgroup label="Meta">
+            <option value="meta-llama/llama-3.3-70b-instruct" [selected]="model() === 'meta-llama/llama-3.3-70b-instruct'">Llama 3.3 70B</option>
+          </optgroup>
+        </select>
       </label>
 
       <button class="btn-primary" [disabled]="!apiKey().trim()" (click)="connect()">
