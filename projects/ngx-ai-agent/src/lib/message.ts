@@ -8,16 +8,21 @@ export interface Message {
   content: string;
   /** ISO-8601 timestamp. */
   createdAt: string;
-  /** Present when this message is a tool result. */
+  /** Present when this is a tool_result message. */
   toolCallId?: string;
-  /** Present when this message was the outcome of a tool call. */
+  /** Present when this is a tool_result message. */
   toolName?: string;
+  /**
+   * Present on assistant messages that triggered tool calls.
+   * Stored so providers can reconstruct the correct API format for follow-up requests.
+   */
+  toolCalls?: ToolCall[];
 }
 
 /** A pending tool call emitted by the LLM during streaming. */
 export interface ToolCall {
   id: string;
   name: string;
-  /** Raw JSON string of arguments as emitted by the model. */
+  /** Accumulated JSON string of arguments as emitted by the model. */
   argumentsJson: string;
 }

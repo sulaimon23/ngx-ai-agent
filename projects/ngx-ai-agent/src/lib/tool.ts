@@ -11,7 +11,7 @@ export interface ToolDefinition<TInput = unknown> {
   /**
    * Executes the tool and returns a plain string the model reads as the result.
    */
-  handler: (input: TInput) => Promise<string>;
+  handler(input: TInput): Promise<string>;
 }
 
 /**

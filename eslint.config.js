@@ -28,11 +28,18 @@ module.exports = defineConfig([
         'error',
         { type: 'element', prefix: 'ngx', style: 'kebab-case' },
       ],
-      // Permit unused _-prefixed parameters (common in stubs/overrides)
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+    },
+  },
+  {
+    // Spec files: mock implementations don't need real async or method binding.
+    files: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/unbound-method': 'off',
     },
   },
   {
