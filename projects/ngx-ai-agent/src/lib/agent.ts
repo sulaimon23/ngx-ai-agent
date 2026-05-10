@@ -173,6 +173,12 @@ export function agent(options?: AgentOptions): AgentRef {
       }
     }
 
+    if (assistantContent === '' && toolCallMap.size === 0) {
+      _messages.update(msgs => msgs.filter(m => m.id !== assistantId));
+      _status.set('idle');
+      return;
+    }
+
     if (toolCallMap.size > 0) {
       const toolCalls = [...toolCallMap.values()];
 

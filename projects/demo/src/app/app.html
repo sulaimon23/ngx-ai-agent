@@ -76,7 +76,7 @@
               <div class="bubble bubble--user">{{ msg.content }}</div>
             }
 
-            @if (msg.role === 'assistant') {
+            @if (msg.role === 'assistant' && (msg.content || msg.toolCalls?.length)) {
               <div class="bubble bubble--assistant">
                 @if (msg.content) {
                   {{ msg.content }}
