@@ -130,13 +130,15 @@ export function agent(options?: AgentOptions): AgentRef {
     let assistantContent = '';
     const toolCallMap = new Map<string, ToolCall>();
 
+    const messagesSnapshot = _messages();
+
     _messages.update(msgs => [
       ...msgs,
       { id: assistantId, role: 'assistant', content: '', createdAt: new Date().toISOString() },
     ]);
 
     const stream = provider.stream({
-      messages: _messages(),
+      messages: messagesSnapshot,
       tools: toolsSig(),
       systemPrompt: options?.systemPrompt,
     });

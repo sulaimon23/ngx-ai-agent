@@ -71,6 +71,10 @@ export class App {
   protected readonly inputText = signal('');
   protected readonly activeChat = signal<AgentRef | null>(null);
 
+  constructor() {
+    if (this.apiKey().trim()) this.connect();
+  }
+
   protected readonly isConnected = computed(() => this.activeChat() !== null);
 
   protected readonly statusLabel = computed((): string => {
