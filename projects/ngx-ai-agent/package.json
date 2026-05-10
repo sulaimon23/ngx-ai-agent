@@ -4,10 +4,10 @@
   "description": "Signals-native LLM agents with tool calling for Angular 21+",
   "keywords": ["angular", "signals", "llm", "ai", "agent", "openrouter", "anthropic"],
   "license": "MIT",
-  "author": "",
+  "author": "Taiwo Sulaimon",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/ngx-ai-agent.git"
+    "url": "https://github.com/sulaimon23/ngx-ai-agent.git"
   },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
